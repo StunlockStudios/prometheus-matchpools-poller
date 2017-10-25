@@ -190,7 +190,7 @@ func main() {
 	var list []NodeEntry
 	for _, element := range m {
 		entry := NodeEntry{
-			Targets: []string{element.ApiUri},
+			Targets: []string{element.ApiUri + "/prometheus/metrics"},
 			Labels: NodeLabels{
 				Instance: element.OriginalApiUri,
 			},
