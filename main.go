@@ -47,54 +47,6 @@ type matchpoolInfo struct {
 	AverageFps          float32  `json:"averageFps"`
 	AverageFrameTimeMs  float32  `json:"averageFrameTimeMs"`
 	CurrentLoadPercent  float32  `json:"currentLoadPercent"`
-	/*
-	   	{
-	           "poolId": "914100866196312064",
-	           "pid": 43340,
-	           "name": "127.0.0.1:9091:MatchPool",
-	           "region": "Home",
-	           "regionPingHost": "127.0.0.1",
-	           "loadAvailable": 0,
-	           "loadTimestamp": 636443094674318464,
-	           "matchConnectHost": "127.0.0.1",
-	           "apiUri": "http://127.0.0.1:9091/match-pool",
-	           "originalApiUri": "http://127.0.0.1:9091/match-pool",
-	           "state": "AVAILABLE",
-	           "supportedMatchTypes": [
-	               "PRIVATE",
-	               "TRAINING",
-	               "TUTORIAL",
-	               "QUICK2V2",
-	               "QUICK3V3",
-	               "VSAI",
-	               "BRAWL",
-	               "CAMPAIGN",
-	               "BATTLEGROUNDS"
-	           ],
-	           "gameplayVersion": 178,
-	           "revision": 35694,
-	           "pooledMatches": 10,
-	           "activeMatches": 0,
-	           "loadModifier": 1,
-	           "loadLimit": 85,
-	           "targetFps": 30,
-	           "uptime": 44,
-	           "usersReserved": 0,
-	           "usersConnected": 0,
-	           "usersDisconnected": 0,
-	           "usersKicked": 0,
-	           "botsActive": 0,
-	           "coreCount": 8,
-	           "threadCount": 8,
-	           "exceptions": 0,
-	           "errors": 0,
-	           "warnings": 1,
-	           "ignoreSignals": false,
-	           "averageFps": -1,
-	           "averageFrameTimeMs": -1,
-	           "currentLoadPercent": 0
-	   	}
-	*/
 }
 
 type config struct {
