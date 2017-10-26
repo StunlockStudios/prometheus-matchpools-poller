@@ -149,10 +149,14 @@ func main() {
 		var match = re.FindStringSubmatch(element.ApiUri)
 		var target = match[1]
 
+		var instance = element.Name
+		instance = strings.Replace(instance, " ", "", -1)
+		instance = strings.Replace(instance, ":", "-", -1)
+
 		entry := NodeEntry{
 			Targets: []string{target},
 			Labels: NodeLabels{
-				Instance: strings.Replace(element.Name, " ", "", -1),
+				Instance: instance,
 			},
 		}
 		list = append(list, entry)
