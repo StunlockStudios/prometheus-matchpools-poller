@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -140,10 +141,16 @@ func main() {
 		Labels  NodeLabels `json:"labels"`
 	}
 
+	re := regexp.MustCompile(`http://(.+)/match-pool`)
+
 	var list []NodeEntry
 	for _, element := range m {
+		// http://149.202.162.66:43675/match-pool
+		var match = re.FindStringSubmatch(element.ApiUri)
+		var target = match[1]
+
 		entry := NodeEntry{
-			Targets: []string{element.ApiUri + "/prometheus/metrics"},
+			Targets: []string{target},
 			Labels: NodeLabels{
 				Instance: strings.Replace(element.Name, " ", "", -1),
 			},
