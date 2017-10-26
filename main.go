@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type poolsResponse struct {
@@ -144,7 +145,7 @@ func main() {
 		entry := NodeEntry{
 			Targets: []string{element.ApiUri + "/prometheus/metrics"},
 			Labels: NodeLabels{
-				Instance: element.OriginalApiUri,
+				Instance: strings.Replace(element.Name, " ", "", -1),
 			},
 		}
 		list = append(list, entry)
