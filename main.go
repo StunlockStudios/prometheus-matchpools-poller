@@ -11,9 +11,6 @@ import (
 	"strings"
 )
 
-type poolsResponse struct {
-	Pools []matchpoolInfo `json:""`
-}
 type matchpoolInfo struct {
 	PoolId              string   `json:"poolId"`
 	Pid                 int      `json:"pid"`
@@ -52,8 +49,9 @@ type matchpoolInfo struct {
 }
 
 type config struct {
-	Url   string `json:"url"`
-	Token string `json:"token"`
+	Url         string `json:"url"`
+	Token       string `json:"token"`
+	Environment string `json:"environment"`
 }
 
 func getConfig(file string) (config, error) {
@@ -75,15 +73,17 @@ func main() {
 
 	var version bool
 	var help bool
-	var configPath string
-	var configUrl string
-	var configToken string
+	var flagConfigPath string
+	var flagMetricsTarget string
+	var flagAuthToken string
+	var flagEnvironment string
 
 	flag.BoolVar(&version, "version", false, "Print current version and exit.")
 	flag.BoolVar(&help, "help", false, "Print help and exit.")
-	flag.StringVar(&configPath, "config", "./config.json", "Path to configuration (json) file.")
-	flag.StringVar(&configUrl, "url", "", "URL to read source data from.")
-	flag.StringVar(&configToken, "token", "", "Authorization token.")
+	flag.StringVar(&flagConfigPath, "config", "./config.json", "Path to configuration (json) file.")
+	flag.StringVar(&flagMetricsTarget, "url", "", "URL to read source data from.")
+	flag.StringVar(&flagAuthToken, "token", "", "Authorization token.")
+	flag.StringVar(&flagEnvironment, "environment", "", "Environment label.")
 	flag.Parse()
 
 	if version {
@@ -94,7 +94,7 @@ func main() {
 		return
 	}
 
-	config, err := getConfig(configPath)
+	config, err := getConfig(flagConfigPath)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -102,12 +102,16 @@ func main() {
 
 	var url = config.Url
 	var token = config.Token
+	var environment = config.Environment
 
-	if configUrl != "" {
-		url = configUrl
+	if flagMetricsTarget != "" {
+		url = flagMetricsTarget
 	}
-	if configToken != "" {
-		token = configToken
+	if flagAuthToken != "" {
+		token = flagAuthToken
+	}
+	if flagEnvironment != "" {
+		environment = flagEnvironment
 	}
 
 	client := &http.Client{}
@@ -134,7 +138,9 @@ func main() {
 	//fmt.Printf("%#v", m[34])
 
 	type NodeLabels struct {
-		Instance string `json:"instance"`
+		Instance    string `json:"instance"`
+		Environment string `json:"environment"`
+		Region      string `json:"region"`
 	}
 	type NodeEntry struct {
 		Targets []string   `json:"targets"`
@@ -153,10 +159,14 @@ func main() {
 		instance = strings.Replace(instance, " ", "", -1)
 		instance = strings.Replace(instance, ":", "-", -1)
 
+		var region = element.Region
+
 		entry := NodeEntry{
 			Targets: []string{target},
 			Labels: NodeLabels{
-				Instance: instance,
+				Instance:    instance,
+				Environment: environment,
+				Region:      region,
 			},
 		}
 		list = append(list, entry)
