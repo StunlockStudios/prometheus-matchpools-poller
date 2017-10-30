@@ -129,8 +129,8 @@ func main() {
 		return
 	}
 
-	var m []matchpoolInfo
-	jsonErr := json.Unmarshal(body, &m)
+	var pools []matchpoolInfo
+	jsonErr := json.Unmarshal(body, &pools)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 		return
@@ -150,16 +150,16 @@ func main() {
 	re := regexp.MustCompile(`http://(.+)/match-pool`)
 
 	var list []NodeEntry
-	for _, element := range m {
+	for _, pool := range pools {
 		// http://149.202.162.66:43675/match-pool
-		var match = re.FindStringSubmatch(element.ApiUri)
+		var match = re.FindStringSubmatch(pool.ApiUri)
 		var target = match[1]
 
-		var instance = element.Name
+		var instance = pool.Name
 		instance = strings.Replace(instance, " ", "", -1)
 		instance = strings.Replace(instance, ":", "-", -1)
 
-		var region = element.Region
+		var region = pool.Region
 
 		entry := NodeEntry{
 			Targets: []string{target},
